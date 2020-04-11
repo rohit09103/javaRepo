@@ -1,0 +1,38 @@
+version: "3.0"
+services:
+    config-server:
+      image: config-server:1.0
+      ports: 
+        - "9000"
+#      links:
+#        - "config-server"
+#      networks:
+#        - custom
+      
+    eureka-server:
+      image: eureka-server:1.0
+      ports: 
+        - "8761"
+#      links:
+#        - "eureka-server"
+#      networks:
+#        - custom
+      
+    room-service:
+      image: room-service:1.0
+      ports: 
+        - "8802:8802"
+      environment:
+        - SPRING_CLOUD_CONFIG_SERVER_URI=${config-server}
+        - SPRING_CLOUD_CONFIG_SERVER_PORT=9000
+      depends_on:
+        - config-server
+        - eureka-server
+      links: 
+        - config-server
+        - eureka-server
+#      networks:
+#        - custom
+#networks:
+#  custom:
+  
